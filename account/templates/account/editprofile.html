@@ -1,0 +1,14 @@
+{% extends 'account/base.html'%}
+{% block title %}Edit Profile{% endblock %}
+
+{% load static %}
+
+{% block content %}
+    <h2>Edit Profile</h2>
+    <form action="{% url 'edit-url' %}" method="POST" class="form-group">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary"> Update </button>
+    </form>
+{% endblock %}
+

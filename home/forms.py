@@ -1,22 +1,21 @@
-from .models import HomeModel
 from django import forms
 
 
-class HomeForm(forms.ModelForm):
-    def __str__(self):
-        return self.fields
-
-    class Meta:
-        model = HomeModel
-        fields = [
-            'name',
-        ]
-        labels = {
-            'name': ''
-        }
-        widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control', 'id': 'textfield1'})
-        }
+# class HomeForm(forms.ModelForm):
+#     def __str__(self):
+#         return self.fields
+#
+#     class Meta:
+#         model = HomeModel
+#         fields = [
+#             'name',
+#         ]
+#         labels = {
+#             'name': ''
+#         }
+#         widgets = {
+#             'name': forms.TextInput(attrs={'class': 'form-control', 'id': 'textfield1'})
+#         }
 
 
 class ProductForm(forms.Form):

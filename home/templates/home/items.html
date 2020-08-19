@@ -1,0 +1,33 @@
+{% for task in tasks %}
+    <li class="list-group-item inline">
+        <div class="todo-indicator bg-success">
+        </div>
+        <div class="widget-content p-0">
+            <div class="widget-content-wrapper">
+                <div class="widget-content-left">
+                    <div class="widget-heading">
+                        {% if task.complete %}
+                            <s>{{ task.name }} </s>
+                        {% else %}
+                            {{ task.name }}
+                        {% endif %}
+                        <div class="widget-content-right">
+                            {% if not task.complete %}
+                            <a href="{% url 'complete-url' task.id %}">
+                                <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button>
+                            </a>
+                            {% endif %}
+                            <a href="{% url 'delete-url' task.id %}">
+                                <button class="border-0 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                            </a>
+                        </div>
+    <!--                                                    <div class="badge badge-danger ml-2">Rejected</div>-->
+    <!--                                                    <div class="badge badge-pill badge-info ml-2">NEW</div>-->
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </li>
+{% endfor %}

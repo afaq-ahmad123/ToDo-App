@@ -3,9 +3,11 @@ from . import views
 from django.contrib.auth import views as auth
 
 urlpatterns = [
-    path('', views.home, name="home-url"),
+    re_path(r'^(?P<i>[0-9]+)/$', views.shortlist, name="home2-url"),
+    re_path(r'^$', views.home, name="home-url"),
     path('login/', auth.LoginView.as_view()),
     re_path(r'^(?P<pk>[0-9]+)/$', views.delete, name="delete-url"),
     re_path(r'^complete/(?P<pk>[0-9]+)/$', views.complete, name="complete-url"),
-    path('add/', views.add_task, name='add-url')
+    re_path('^add/$', views.add_task, name='add-url'),
+    re_path(r'^update/(?P<i>[0-9]+)/$', views.shortlist, name="update_tasks"),
 ]

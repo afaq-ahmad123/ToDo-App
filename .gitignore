@@ -12,4 +12,10 @@ task4/__pycache__/urls.cpython-36.pyc
 task4/__pycache__/wsgi.cpython-36.pyc
 home/migrations/__pycache__/0001_initial.cpython-36.pyc
 home/migrations/__pycache__/__init__.cpython-36.pyc
+account/__pycache__/forms.cpython-36.pyc
+account/__pycache__/urls.cpython-36.pyc
+account/__pycache__/views.cpython-36.pyc
+home/__pycache__/forms.cpython-36.pyc
+home/__pycache__/urls.cpython-36.pyc
+home/__pycache__/views.cpython-36.pyc
 

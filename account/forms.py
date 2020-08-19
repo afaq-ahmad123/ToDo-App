@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
@@ -26,11 +26,10 @@ class LoginForm(forms.Form):
                 raise forms.ValidationError("Password Incorrect")
 
 
-class RegisterForm(UserCreationForm):
 
-    # email1 = forms.CharField(label='Email', widget=forms.EmailInput)
-    # email2 = forms.CharField(label='Confirm Email', widget=forms.EmailInput)
-    # password = forms.CharField(label='password', widget=forms.PasswordInput)
+
+
+class RegisterForm(UserCreationForm):
 
     first_name = forms.CharField(label='First Name', max_length=30, required=False)
     last_name = forms.CharField(label='Last Name', max_length=30, required=False)
@@ -40,8 +39,6 @@ class RegisterForm(UserCreationForm):
                                             'unique': True,
                              }))
     username = forms.CharField(required=True)
-    # pk = User.objects.count()
-    # password1 = forms.CharField(required=True, widget=forms.PasswordInput)
 
     class Meta:
         model = User
@@ -61,12 +58,3 @@ class RegisterForm(UserCreationForm):
             if user:
                 raise forms.ValidationError('The user already exist')
 
-    # def clean(self):
-    #     email1 = self.cleaned_data['email1']
-    #     email2 = self.cleaned_data['email2']
-    #     if email1 != email2:
-    #         raise forms.ValidationError('Emails don\'t match')
-    #     if User.objects.filter(email=email1).exists():
-    #         raise forms.ValidationError('User already exists')
-    #
-    #     return email1
