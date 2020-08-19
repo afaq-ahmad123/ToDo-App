@@ -1,0 +1,8 @@
+README.md
+db.sqlite3
+home/migrations/__pycache__/0002_remove_homemodel_user.cpython-36.pyc
+home/migrations/__pycache__/0003_homemodel_user.cpython-36.pyc
+home/migrations/__pycache__/0004_remove_homemodel_user.cpython-36.pyc
+home/migrations/__pycache__/0005_homemodel_user.cpython-36.pyc
+home/migrations/__pycache__/0006_auto_20200819_0904.cpython-36.pyc
+account/templatetags/__pycache__/

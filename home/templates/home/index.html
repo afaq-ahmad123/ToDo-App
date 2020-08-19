@@ -1,0 +1,158 @@
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+<link href='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' rel="stylesheet">
+<script type="text/js" src='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
+<link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel="stylesheet">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+<link href="{% static 'index.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+
+<!--<div class="page-content page-container" id="page-content">-->
+<!--    <div class="padding">-->
+<!--        <div class="row container d-flex justify-content-center">-->
+<!--            <div class="col-lg-12">-->
+<!--                <div class="card px-3">-->
+<!--                    <div class="card-body">-->
+<!--                        <h4 class="card-title">Awesome Todo list</h4>-->
+
+<!--                        <form action="." method="POST">-->
+<!--                            {% csrf_token %}-->
+<!--                        &lt;!&ndash;    <input type="text" name="q">&ndash;&gt;-->
+<!--                            {{ form.name }}-->
+<!--                        &lt;!&ndash;    {{ form.title.errors|escape }}&ndash;&gt;-->
+<!--                        &lt;!&ndash;    {{ form.title.label_tag }}&ndash;&gt;-->
+<!--                        &lt;!&ndash;    {{ form.title|safe }}&ndash;&gt;-->
+
+<!--                            <input type="submit" class="btn btn-success" value="Add">-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+
+<div class="row d-flex justify-content-center container">
+    <div class="col-md-8">
+        <div class="card-hover-shadow-2x mb-3 card">
+            <div class="card-header-tab card-header">
+                <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
+                    <i class="fa fa-tasks"></i>&nbsp;Todo List
+                </div>
+<!--                <div class="btn-group" id="userMenu" style="display: none;">-->
+<!--                  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-hashpopup="true" aria-expanded="false">-->
+<!--                    {{ user }} <span class="caret"></span>-->
+<!--                  </button>-->
+<!--                  <ul class="dropdown-menu">-->
+<!--                    <li >{{ user }}</li>-->
+<!--                    <li><a id="userProfile" href="#">User Profile</a></li>-->
+<!--                    <li><a id="logOut" href="#">Logout</a></li>-->
+<!--                  </ul>-->
+<!--                </div>-->
+                <div style="float:left;">
+                    <label class="checkbox-inline check">
+                          <input type="checkbox" name="skills" id="radio" value="1"> All Tasks
+                    </label>
+                    <label class="checkbox-inline check">
+                          <input type="checkbox" name="skills" value="2"> Active Tasks
+                    </label>
+                    <label class="checkbox-inline check">
+                          <input type="checkbox" name="skills" value="3"> Completed Tasks
+                    </label>
+                </div>
+                <div class="w3-container" style="float:right;">
+                  <div class="w3-dropdown-hover">
+                      <button class="w3-button"><i class="fa fa-user"></i></button>
+                      <button class="w3-button">{{ user }}</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                      <a href="#" class="w3-bar-item w3-button">Profile</a>
+                      <a href="{% url 'logout-url' %}" class="w3-bar-item w3-button">Logout</a>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+            <div class="scroll-area-sm">
+                <perfect-scrollbar class="ps-show-limits">
+                    <div style="position: static;" class="ps ps--active-y">
+                        <div class="ps-content">
+                            <ul class=" list-group list-group-flush">
+                                {% for task in tasks %}
+<!--                                    {% if completed == 2 %}-->
+                                <li class="list-group-item inline">
+                                    <div class="todo-indicator bg-success">
+                                    </div>
+                                    <div class="widget-content p-0">
+                                        <div class="widget-content-wrapper">
+<!--                                            <div class="widget-content-left mr-2">-->
+<!--                                                <div class="custom-checkbox custom-control"> <input class="custom-control-input" id="exampleCustomCheckbox12" type="checkbox"><label class="custom-control-label" for="exampleCustomCheckbox12">&nbsp;</label> </div>-->
+<!--                                            </div>-->
+
+                                            <div class="widget-content-left">
+                                                <div class="widget-heading">
+                                                    {% if task.complete %}
+                                                        <s>{{ task.name }} </s>
+                                                    {% else %}
+                                                        {{ task.name }}
+                                                    {% endif %}
+                                                    <div class="widget-content-right">
+                                                        {% if not task.complete %}
+                                                        <a href="{% url 'complete-url' task.id %}">
+                                                            <button class="border-0 btn-transition btn btn-outline-success"> <i class="fa fa-check"></i></button>
+                                                        </a>
+                                                        {% endif %}
+                                                        <a href="{% url 'delete-url' task.id %}">
+                                                            <button class="border-0 btn-transition btn btn-outline-danger"><i class="fa fa-trash"></i></button>
+                                                        </a>
+                                                    </div>
+<!--                                                    <div class="badge badge-danger ml-2">Rejected</div>-->
+<!--                                                    <div class="badge badge-pill badge-info ml-2">NEW</div>-->
+
+                                                </div>
+<!--                                                <div class="widget-subheading"><i>By Bob</i></div>-->
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </li>
+<!--                                {% endif %}-->
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            </div>
+            <div class="d-block text-right card-footer">
+                 <form action="{% url 'add-url' %}" method="POST">
+                     {% csrf_token %}
+                     <input type="text" id="textfield1" class="form-control" name="name" required>
+<!--                     {{ form.name }}-->
+                    <div class="mr-2 btn btn-link btn-sm" onclick="clearText()">Cancel</div>
+                    <button type="submit" class="btn btn-primary">Add Task</button>
+                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var completed=0;
+    $('.check input:checkbox').click(function() {
+        $('.check input:checkbox').not(this).prop('checked', false);
+        var completed = $(this).val();
+        if (completed == 2){
+            alert("Inactive");
+        }
+    });
+</script>
+<script type="text/javascript">
+    function clearText()
+    {
+        document.getElementById('textfield1').value = "";
+    }
+</script>
