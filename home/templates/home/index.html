@@ -9,10 +9,26 @@
 <link href="{% static 'index.css' %}" rel="stylesheet">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-
+<script type="text/javascript">
+    setTimeout(function(){
+        if($('#msg').length>0){
+            $('#msg').remove();
+        }
+    }, 2000);
+</script>
+<br><br>
 <div class="row d-flex justify-content-center container">
     <div class="col-md-8">
         <div class="card-hover-shadow-2x mb-3 card">
+            <div id="msgs">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }} m-2" id="msg" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            </div>
             <div class="card-header-tab card-header">
                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                     <i class="fa fa-tasks"></i>&nbsp;Todo List
@@ -77,6 +93,7 @@
             success: function (response) {
                  // replace the inside of #wrapper div with the injection.html (that has the new items values)
                  $('.list-group').replaceWith('<ul class="list-group list-group-flush">' + response + '</ul>');
+                 $('#msgs').html();
             },
         });
     });

@@ -127,3 +127,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+    messages.SUCCESS: 'alert-success',
+    messages.DEBUG: 'alert-info',
+    messages.INFO: 'alert-info',
+    messages.WARNING: 'alert-warning',
+    messages.ERROR: 'alert-danger',
+}

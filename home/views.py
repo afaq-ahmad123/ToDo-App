@@ -1,7 +1,33 @@
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import render, redirect, reverse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from home.models import HomeModel
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView, UpdateView
+from .forms import EditForm
+from django.contrib import messages
+
+
+class TaskListView(LoginRequiredMixin, ListView):
+    """Class Based List view to show all the tasks on the home page. It is used instead of home() view function"""
+    model = HomeModel
+    template_name = 'home/index.html'
+    context_object_name = 'tasks'
+    extra_context = {
+        'i': 1
+    }
+
+    def get_queryset(self):
+        return self.model.objects.filter(user=self.request.user)
+
+
+class TaskUpdateView(LoginRequiredMixin, UpdateView):
+    """Class Based view to update a task"""
+    model = HomeModel
+    fields = ['name', 'complete']
+
+    def get_success_url(self):
+        return reverse('home-url')
 
 
 @login_required
@@ -22,7 +48,11 @@ def delete(request, pk):
     """ This view method is used to delete a specified task from the List """
     task = get_object_or_404(HomeModel, pk=pk)
     print(task.name)
-    task.delete()
+    if task:
+        task.delete()
+        messages.success(request, "Deleted Successfully")
+    else:
+        messages.error(request, "Unsuccessful")
     return redirect('/')
 
 
@@ -31,6 +61,7 @@ def complete(request, pk):
     obj = HomeModel.objects.filter(pk=pk).first()
     obj.complete = True
     obj.save()
+    messages.success(request, "Marked as Completed")
     return redirect('/')
 
 
@@ -41,6 +72,7 @@ def add_task(request):
         if name != '':
             obj = HomeModel(name=request.POST['name'], complete=False, user=request.user)
             obj.save()
+            messages.success(request, "Task Added Successfully")
         print(request.POST)
     print(HomeModel.objects.filter(user=request.user))
     return redirect(reverse('home-url'))
@@ -61,6 +93,18 @@ def shortlist(request, i=1):
         'tasks': results
     }
     return render(request, 'home/items.html', context)
+
+
+def edit_task(request, pk=None):
+    task = get_object_or_404(HomeModel, pk)
+    if request.method == "POST":
+        obj = EditForm(request.POST or None, instance=task)
+        if obj.is_valid():
+            obj.save()
+            return HttpResponseRedirect(task.get_absolute_url())
+
+
+
 
 
 

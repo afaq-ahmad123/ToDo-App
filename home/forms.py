@@ -1,4 +1,14 @@
 from django import forms
+from .models import HomeModel
+
+
+class EditForm(forms.ModelForm):
+    class Meta:
+        model = HomeModel
+        fields = ('name', 'complete')
+        label = {
+            'name': 'Task Name',
+        }
 
 
 # class HomeForm(forms.ModelForm):
