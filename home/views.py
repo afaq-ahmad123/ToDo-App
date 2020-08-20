@@ -30,19 +30,19 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('home-url')
 
 
-@login_required
-def home(request):
-    """ This is the main Home Page view to show all the tasks of logged in user. It is function based, so for
-     now, I am using the TaskListView view instead of this """
-
-    if request.user.is_authenticated:
-        username = request.user.username
-    context = {
-        'i': 1,
-        'user': username,
-        'tasks': TaskModel.objects.filter(user=request.user)
-    }
-    return render(request, 'home/index.html', context)
+# @login_required
+# def home(request):
+#     """ This is the main Home Page view to show all the tasks of logged in user. It is function based, so for
+#      now, I am using the TaskListView view instead of this """
+#
+#     if request.user.is_authenticated:
+#         username = request.user.username
+#     context = {
+#         'i': 1,
+#         'user': username,
+#         'tasks': TaskModel.objects.filter(user=request.user)
+#     }
+#     return render(request, 'home/index.html', context)
 
 
 @login_required
@@ -100,15 +100,15 @@ def shortlist(request, i=1):
     return render(request, 'home/items.html', context)
 
 
-@login_required
-def edit_task(request, pk=None):
-    task = get_object_or_404(TaskModel, pk)
-    if request.method == "POST":
-        obj = EditForm(request.POST or None, instance=task)
-        if obj.is_valid():
-            obj.save()
-            return HttpResponseRedirect(task.get_absolute_url())
-
+# @login_required
+# def edit_task(request, pk=None):
+#     task = get_object_or_404(TaskModel, pk)
+#     if request.method == "POST":
+#         obj = EditForm(request.POST or None, instance=task)
+#         if obj.is_valid():
+#             obj.save()
+#             return HttpResponseRedirect(task.get_absolute_url())
+#
 
 
 
