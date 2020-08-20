@@ -22,7 +22,7 @@ class TaskListView(LoginRequiredMixin, ListView):
 
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
-    """Class Based view to update a task"""
+    """Class Based view to update a task. It will use homemodel_form.html template."""
     model = HomeModel
     fields = ['name', 'complete']
 
@@ -32,7 +32,8 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
 
 @login_required
 def home(request):
-    """ This is the main Home Page view to show all the tasks of logged in user """
+    """ This is the main Home Page view to show all the tasks of logged in user. It is function based, so for
+     now, I am using the TaskListView view instead of this """
 
     if request.user.is_authenticated:
         username = request.user.username

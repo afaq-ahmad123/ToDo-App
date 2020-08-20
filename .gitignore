@@ -5,6 +5,7 @@ home/migrations/__pycache__/0003_homemodel_user.cpython-36.pyc
 home/migrations/__pycache__/0004_remove_homemodel_user.cpython-36.pyc
 home/migrations/__pycache__/0005_homemodel_user.cpython-36.pyc
 home/migrations/__pycache__/0006_auto_20200819_0904.cpython-36.pyc
+*.pyc
 account/templatetags/__pycache__/
 task4/__pycache__/__init__.cpython-36.pyc
 task4/__pycache__/settings.cpython-36.pyc
