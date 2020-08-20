@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from .forms import LoginForm, RegisterForm
-from django.contrib.auth.forms import UserChangeForm
-from django.views import generic
-from django.urls import reverse, reverse_lazy
+from django.views.generic import UpdateView
+from django.contrib.auth.models import User
+from django.urls import reverse
 from django.contrib.auth import (
     authenticate,
     login,
@@ -56,16 +56,17 @@ def signup_view(request):
     return render(request, 'account/signup.html', context)
 
 
-class EditProfile(generic.UpdateView):
+class EditProfile(UpdateView):
 
     """ This is edit profile class that is using the built-in UserChangeForm """
 
-    form_class = UserChangeForm
-    template_name = 'account/editprofile.html'
-    success_url = reverse_lazy('home-url')
+    # form_class = UserChangeForm
+    template_name = 'account/user_form.html'
+    model = User
+    fields = ['username', 'first_name', 'last_name', 'email', 'password']
 
-    def get_object(self):
-        return self.request.user
+    def get_success_url(self):
+        return reverse('home-url')
 
 
 def log_user(request):

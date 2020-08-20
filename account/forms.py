@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django import forms
 
 
@@ -24,9 +24,6 @@ class LoginForm(forms.Form):
                 raise forms.ValidationError("User Not activated")
             if not user.check_password(password):
                 raise forms.ValidationError("Password Incorrect")
-
-
-
 
 
 class RegisterForm(UserCreationForm):
@@ -57,4 +54,11 @@ class RegisterForm(UserCreationForm):
             user = authenticate([username, password])
             if user:
                 raise forms.ValidationError('The user already exist')
+
+
+class EditForm(UserChangeForm):
+
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'password', 'email']
 

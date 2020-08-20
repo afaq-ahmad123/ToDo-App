@@ -51,9 +51,9 @@
                 <div class="w3-container" style="float:right;">
                   <div class="w3-dropdown-hover">
                       <button class="w3-button"><i class="fa fa-user"></i></button>
-                      <button class="w3-button">{{ user }}</button>
+                      <button class="w3-button">{{ user.username }}</button>
                     <div class="w3-dropdown-content w3-bar-block w3-border">
-                      <a href="{% url 'edit-url' %}" class="w3-bar-item w3-button">Profile</a>
+                      <a href="{% url 'prof-url' user.id %}" class="w3-bar-item w3-button">Profile</a>
                       <a href="{% url 'logout-url' %}" class="w3-bar-item w3-button">Logout</a>
                     </div>
                   </div>

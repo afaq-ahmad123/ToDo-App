@@ -5,7 +5,7 @@
 
 {% block content %}
     <h2>Edit Profile</h2>
-    <form action="{% url 'edit-url' %}" method="POST" class="form-group">
+    <form method="POST" class="form-group">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary"> Update </button>

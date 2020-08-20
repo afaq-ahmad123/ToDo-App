@@ -14,11 +14,20 @@ class TaskListView(LoginRequiredMixin, ListView):
     template_name = 'home/index.html'
     context_object_name = 'tasks'
     extra_context = {
-        'i': 1
+        'i': 1,
     }
 
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        super().get_context_data(**kwargs)
+        print("user id" + str(self.request.user.id))
+        return {
+            'user': self.request.user,
+            'i': 1,
+            'tasks': self.model.objects.filter(user=self.request.user)
+        }
 
 
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
