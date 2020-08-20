@@ -7,7 +7,7 @@ from django.urls import reverse
 User = get_user_model()
 
 
-class HomeModel(models.Model):
+class TaskModel(models.Model):
     name = models.CharField(max_length=100)
     complete = models.BooleanField()
     created = datetime.now()
