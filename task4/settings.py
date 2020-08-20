@@ -13,7 +13,10 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 import django_heroku
-django_heroku.settings(locals())
+# Parse database configuration from $DATABASE_URL
+import dj_database_url
+
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -25,10 +28,12 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'hvy9ak^b#dc6t8h%^mhgq#&%w0#0p@(pk-poh-i5mxqn(ii7-7'
 
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,16 +84,17 @@ WSGI_APPLICATION = 'task4.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        'HOST': 'localhost',
-        'USER': 'afaq',
-        'PASSWORD': 'arbisoft',
-        'PORT': '5432',
-    }
-}
+DATABASES = {}
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    #     'HOST': 'localhost',
+    #     'USER': 'afaq',
+    #     'PASSWORD': 'arbisoft',
+    #     'PORT': '5432',
+    # }
+# }
+DATABASES['default'] = dj_database_url.config()
 
 
 # Password validation
@@ -139,3 +145,5 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+django_heroku.settings(locals())
