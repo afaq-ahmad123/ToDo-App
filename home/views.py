@@ -33,6 +33,7 @@ class TaskListView(LoginRequiredMixin, ListView):
 class TaskUpdateView(LoginRequiredMixin, UpdateView):
     """Class Based view to update a task. It will use homemodel_form.html template."""
     model = TaskModel
+    template_name = 'home/homemodel_form.html'
     fields = ['name', 'complete']
 
     def get_success_url(self):
