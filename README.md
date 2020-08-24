@@ -17,3 +17,5 @@ Django Todo List with complete login, Logout, Edit Profile features.
     1.7. Edit Profile 
     1.8. Logout
  6. View is being changed by ajax calls on checkbox seletection
+ 7. This app is deployed on https://task-app-django.herokuapp.com/
+ 
