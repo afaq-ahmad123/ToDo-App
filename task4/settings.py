@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'task4.wsgi.application'
 
 DATABASES = {
     'default':
-    # {dj_database_url.config()}
+    # dj_database_url.config()
         {'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
         'HOST': 'localhost',

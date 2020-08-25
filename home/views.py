@@ -1,10 +1,8 @@
-from django.shortcuts import render, redirect, reverse, HttpResponseRedirect
+from django.shortcuts import render, redirect, reverse, Http404
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404
 from home.models import TaskModel
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView, UpdateView
-from .forms import EditForm
 from django.contrib import messages
 
 
@@ -36,30 +34,34 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
     template_name = 'home/homemodel_form.html'
     fields = ['name', 'complete']
 
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+            # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        if pk is not None:
+            queryset = queryset.filter(pk=pk, user=self.request.user)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get()
+        except queryset.model.DoesNotExist:
+            print("object not found")
+            raise Http404(("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
+
     def get_success_url(self):
         return reverse('home-url')
 
-
-# @login_required
-# def home(request):
-#     """ This is the main Home Page view to show all the tasks of logged in user. It is function based, so for
-#      now, I am using the TaskListView view instead of this """
-#
-#     if request.user.is_authenticated:
-#         username = request.user.username
-#     context = {
-#         'i': 1,
-#         'user': username,
-#         'tasks': TaskModel.objects.filter(user=request.user)
-#     }
-#     return render(request, 'home/index.html', context)
 
 
 @login_required
 def delete(request, pk):
     """ This view method is used to delete a specified task from the List """
-    task = get_object_or_404(TaskModel, pk=pk)
-    print(task.name)
+    # task = get_object_or_404(TaskModel, pk=pk)
+    task = TaskModel.objects.filter(user=request.user, pk=pk).first()
+    # print(task.name)
     if task:
         task.delete()
         messages.success(request, "Deleted Successfully")
@@ -108,17 +110,6 @@ def shortlist(request, i=1):
         'tasks': results
     }
     return render(request, 'home/items.html', context)
-
-
-# @login_required
-# def edit_task(request, pk=None):
-#     task = get_object_or_404(TaskModel, pk)
-#     if request.method == "POST":
-#         obj = EditForm(request.POST or None, instance=task)
-#         if obj.is_valid():
-#             obj.save()
-#             return HttpResponseRedirect(task.get_absolute_url())
-#
 
 
 

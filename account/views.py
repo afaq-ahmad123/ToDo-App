@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, Http404
 from .forms import LoginForm, RegisterForm
 from django.views.generic import UpdateView
 from django.contrib.auth.models import User
@@ -60,16 +60,31 @@ class EditProfile(UpdateView):
 
     """ This is edit profile class that is using the built-in UserChangeForm """
 
-    # form_class = UserChangeForm
     template_name = 'account/user_form.html'
     model = User
-    fields = ['username', 'first_name', 'last_name', 'email', 'password']
+    fields = ['username', 'first_name', 'last_name', 'email']
+
+    def get_object(self, queryset=None):
+        if queryset is None:
+            queryset = self.get_queryset()
+            # Next, try looking up by primary key.
+        pk = self.kwargs.get(self.pk_url_kwarg)
+        queryset = queryset.filter(pk=pk)
+
+        try:
+            # Get the single item from the filtered queryset
+            obj = queryset.get(pk=self.request.user.pk)
+        except queryset.model.DoesNotExist:
+            print("object not found")
+            raise Http404(("No %(verbose_name)s found matching the query") %
+                          {'verbose_name': queryset.model._meta.verbose_name})
+        return obj
 
     def get_success_url(self):
         return reverse('home-url')
 
 
-def log_user(request):
+def logout_user(request):
     """ this is the Django view to logout a user and will called when the logout option from dropdown will be
     selected """
 
