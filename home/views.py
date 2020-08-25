@@ -59,9 +59,7 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
 @login_required
 def delete(request, pk):
     """ This view method is used to delete a specified task from the List """
-    # task = get_object_or_404(TaskModel, pk=pk)
     task = TaskModel.objects.filter(user=request.user, pk=pk).first()
-    # print(task.name)
     if task:
         task.delete()
         messages.success(request, "Deleted Successfully")
