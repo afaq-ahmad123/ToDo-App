@@ -16,8 +16,6 @@ import django_heroku
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -39,10 +37,10 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    'account.apps.AccountConfig',
+    # 'django.contrib.admin',
     'django.contrib.auth',
-    'home',
-    'account',
+    'home.apps.HomeConfig',
     'crispy_forms',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -55,7 +53,8 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'account.middleware.AuthenticationMiddleware',
+    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -79,6 +78,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'task4.wsgi.application'
+AUTH_USER_MODEL = 'account.User'
 
 
 # Database
@@ -122,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 

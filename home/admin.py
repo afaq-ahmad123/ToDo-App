@@ -4,8 +4,6 @@ from .models import TaskModel
 
 # Register your models here.
 
-# admin.site.register(TaskModel)
-
 
 class filter(admin.SimpleListFilter):
     title = 'Search filters'

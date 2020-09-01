@@ -1,12 +1,14 @@
 from django.shortcuts import render, redirect, reverse, Http404
-from django.contrib.auth.decorators import login_required
-from home.models import TaskModel
-from django.contrib.auth.mixins import LoginRequiredMixin
+from .models import TaskModel
+from account.models import User
+from account.decorators import login_required
 from django.views.generic import ListView, UpdateView
 from django.contrib import messages
+from django.utils.decorators import method_decorator
 
 
-class TaskListView(LoginRequiredMixin, ListView):
+@method_decorator(login_required, name='dispatch')
+class TaskListView(ListView):
     """Class Based List view to show all the tasks on the home page. It is used instead of home() view function"""
     model = TaskModel
     template_name = 'home/index.html'
@@ -14,13 +16,13 @@ class TaskListView(LoginRequiredMixin, ListView):
     extra_context = {
         'i': 1,
     }
-
+            
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         super().get_context_data(**kwargs)
-        print("user id" + str(self.request.user.id))
+        # print("user id" + str(self.request.user.id))
         return {
             'user': self.request.user,
             'i': 1,
@@ -28,7 +30,8 @@ class TaskListView(LoginRequiredMixin, ListView):
         }
 
 
-class TaskUpdateView(LoginRequiredMixin, UpdateView):
+@method_decorator(login_required, name='dispatch')
+class TaskUpdateView(UpdateView):#LoginRequiredMixin,
     """Class Based view to update a task. It will use homemodel_form.html template."""
     model = TaskModel
     template_name = 'home/homemodel_form.html'
@@ -55,13 +58,16 @@ class TaskUpdateView(LoginRequiredMixin, UpdateView):
         return reverse('home-url')
 
 
-
 @login_required
 def delete(request, pk):
     """ This view method is used to delete a specified task from the List """
     task = TaskModel.objects.filter(user=request.user, pk=pk).first()
     if task:
         task.delete()
+        task_count = TaskModel.objects.filter(user=request.user).count()
+        user = User.objects.get(id=request.user.id)
+        user.task_count = task_count
+        user.save(update_fields=['task_count'])
         messages.success(request, "Deleted Successfully")
     else:
         messages.error(request, "Unsuccessful")
@@ -86,6 +92,10 @@ def add_task(request):
         if name != '':
             obj = TaskModel(name=request.POST['name'], complete=False, user=request.user)
             obj.save()
+            task_count = TaskModel.objects.filter(user=request.user).count()
+            user = User.objects.get(id=request.user.id)
+            user.task_count = task_count
+            user.save(update_fields=['task_count'])
             messages.success(request, "Task Added Successfully")
         print(request.POST)
     print(TaskModel.objects.filter(user=request.user))

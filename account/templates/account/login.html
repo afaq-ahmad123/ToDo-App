@@ -29,6 +29,7 @@
             {% endfor %}
           </p>
         {% endfor %}
+        <input type="hidden" name="next" value="{{ next }}">
         <button type="submit" class="btn btn-primary"> Login </button>
     </form>
     If you don't have account, you can register <a href="{% url 'sign-url' %}">here</a>

@@ -1,10 +1,11 @@
 from django.db import models
-from django.contrib.auth import get_user_model
+# from django.contrib.auth import get_user_model
+from account.models import User
 from datetime import datetime
 from django.urls import reverse
 
 # Create your models here.
-User = get_user_model()
+# User = get_user_model()
 
 
 class TaskModel(models.Model):
@@ -14,6 +15,7 @@ class TaskModel(models.Model):
     user = models.ForeignKey(
                         User,
                         on_delete=models.CASCADE,
+
                     )
 
     def __str__(self):
@@ -21,3 +23,4 @@ class TaskModel(models.Model):
 
     def get_absolute_url(self):
         return reverse('edit-url', kwargs={'pk': self.pk})
+
