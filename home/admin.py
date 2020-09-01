@@ -24,8 +24,8 @@ class filter(admin.SimpleListFilter):
 @admin.register(TaskModel)
 class TaskAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
-    list_display = ['name', 'complete', 'id']
+    list_display = ['name', 'created_at', 'id']
     list_filter = (filter, )
-    fields = ['id', 'name', 'complete']
-    search_fields = ['name__endswith']
+    fields = ['id', 'name', 'complete', 'user']
+    search_fields = ['name__startswith']
 

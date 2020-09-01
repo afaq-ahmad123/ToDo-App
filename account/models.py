@@ -5,16 +5,18 @@ from django.shortcuts import reverse
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, password=None):
+    def create_user(self, username, email=None, password=None):
         if not username:
             raise ValueError("Username required")
-
+        if self.model.objects.filter(username=username):
+            raise ValueError("User already exists")
         user = self.model(
             # email=self.normalize_email(email),
-            username=username,
+            username=self.normalize_email(username),
         )
         user.authenticated = True
         user.anonymous = False
+        user.email = self.normalize_email(email)
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -70,17 +72,8 @@ class User(AbstractBaseUser):#models.Model
         return reverse('prof-url' + self.pk, kwargs={'pk': self.pk})
 
     def __str__(self):
+
         return self.username
-
-    # def set_password(self, password):
-    #     if password:
-    #         self.password = password
-    #         self.save()
-    #         return True
-    #     return False
-
-    # def check_password(self, raw_password):
-    #     return self.password == raw_password
 
     def authenticate(self):
         self.authenticated = True

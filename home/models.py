@@ -11,7 +11,7 @@ from django.urls import reverse
 class TaskModel(models.Model):
     name = models.CharField(max_length=100)
     complete = models.BooleanField()
-    created = datetime.now()
+    created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
                         User,
                         on_delete=models.CASCADE,

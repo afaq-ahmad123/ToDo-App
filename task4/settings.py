@@ -38,7 +38,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'account.apps.AccountConfig',
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'home.apps.HomeConfig',
     'crispy_forms',
@@ -54,7 +54,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'account.middleware.AuthenticationMiddleware',
-    # 'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]

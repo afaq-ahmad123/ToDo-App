@@ -136,10 +136,11 @@ class EditForm(forms.ModelForm):#UserChangeForm
         self.fields['email'].required = False
         self.fields['first_name'].required = False
         self.fields['last_name'].required = False
+        self.fields['task_count'].widget.attrs['readonly'] = True
 
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['username', 'first_name', 'last_name', 'email', 'task_count']
 
     def clean(self):
         username = self.cleaned_data.get('username')
