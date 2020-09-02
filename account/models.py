@@ -22,13 +22,13 @@ class UserManager(BaseUserManager):
         return user
 
     def create_staffuser(self, username, password):
-        user = self.create_user(username, password)
+        user = self.create_user(username=username, password=password)
         user.staff = True
         user.save(using=self._db)
         return user
 
     def create_superuser(self, username, password):
-        user = self.create_user(username, password)
+        user = self.create_user(username=username, password=password)
         user.staff = True
         user.admin = True
         user.save(using=self._db)
