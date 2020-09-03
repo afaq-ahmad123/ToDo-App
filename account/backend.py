@@ -1,4 +1,5 @@
 from .models import User
+from rest_framework.authtoken.models import Token
 
 
 class AuthBackend(object):
@@ -14,16 +15,18 @@ class AuthBackend(object):
     def login(request, user):
         request.session['user'] = user.username
         request.user = user
-        # return
+        request.auth = Token.objects.get(user=user).key
+        request.session['token'] = Token.objects.get(user=user).key
 
     @staticmethod
     def logout(request):
         if 'user' in request.session:
             del request.session['user']
+        if 'token' in request.session:
+            del request.session['token']
         try:
-            print(request.user)
-            del request.user
-            print(request.user)
+            request.user = None
+            request.auth = None
         except AttributeError:
             print("attr error")
         return request

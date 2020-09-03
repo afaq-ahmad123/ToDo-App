@@ -22,3 +22,6 @@ class Command(BaseCommand):
                 print(' '.join([user.username, user.email, password]))
             except ValueError as e:
                 print(e)
+                i -= 1
+                continue
+

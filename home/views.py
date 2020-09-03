@@ -3,6 +3,10 @@ from .models import TaskModel
 from account.models import User
 from account.decorators import login_required
 from django.views.generic import ListView, UpdateView
+from rest_framework import generics
+from .serializer import TaskSerializer
+from rest_framework.authtoken.models import Token
+from rest_framework.response import Response
 from django.contrib import messages
 from django.utils.decorators import method_decorator
 
@@ -13,16 +17,16 @@ class TaskListView(ListView):
     model = TaskModel
     template_name = 'home/index.html'
     context_object_name = 'tasks'
+
     extra_context = {
         'i': 1,
     }
-            
+
     def get_queryset(self):
         return self.model.objects.filter(user=self.request.user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         super().get_context_data(**kwargs)
-        # print("user id" + str(self.request.user.id))
         return {
             'user': self.request.user,
             'i': 1,
@@ -31,7 +35,7 @@ class TaskListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class TaskUpdateView(UpdateView):#LoginRequiredMixin,
+class TaskUpdateView(UpdateView):
     """Class Based view to update a task. It will use homemodel_form.html template."""
     model = TaskModel
     template_name = 'home/homemodel_form.html'
@@ -57,6 +61,33 @@ class TaskUpdateView(UpdateView):#LoginRequiredMixin,
     def get_success_url(self):
         return reverse('home-url')
 
+
+@method_decorator(login_required, name='dispatch')
+class TaskApi(generics.ListCreateAPIView):
+    queryset = None
+    serializer_class = TaskSerializer
+
+    def get_queryset(self):
+        if self.request.user.is_authenticated:
+                # and 'token' in self.request.session:
+            self.queryset = TaskModel.objects.filter(user=self.request.user)
+            return super(TaskApi, self).get_queryset()
+        else:
+            return None
+
+
+class TaskDetailAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = TaskModel.objects.all()
+    serializer_class = TaskSerializer
+    authentication_classes = ()
+    permission_classes = ()
+
+# @api_view(['GET'])
+# def task_list(request):
+#     if request.method == 'GET':
+#         tasks = TaskModel.objects.all()
+#         serializer = TaskSerializer(tasks, many=True)
+#         return Response(serializer.data)
 
 @login_required
 def delete(request, pk):

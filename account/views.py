@@ -9,31 +9,6 @@ from .decorators import login_required
 from django.utils.decorators import method_decorator
 
 
-
-# # Create your views here.
-# class LoginView(FormView):
-#     """login view"""
-#
-#     form_class = LoginForm
-#     # success_url = reverse('home-url')
-#     template_name = 'account/login.html'
-#
-#     def form_valid(self, form):
-#         """ process user login"""
-#         credentials = form.cleaned_data
-#
-#         user = authenticate(username=credentials['username'],
-#                             password=credentials['password'])
-#
-#         if user is not None:
-#             login(self.request, user)
-#             return HttpResponseRedirect(reverse('home-url'))
-#
-#         else:
-#             messages.add_message(self.request, messages.INFO, 'Wrong credentials')
-#
-#             return HttpResponseRedirect(reverse('login-url'))
-
 def login_view(request):
     """This is the main Login Page view to log in a user"""
 
@@ -48,11 +23,11 @@ def login_view(request):
             if user:
                 AuthBackend.login(request, user)
             next_url = request.POST.get('next')
-            if next_url is not None:
-                return redirect(reverse('home-url'))
+            if not next_url:
+                # return redirect(reverse('home-url'))
                 return redirect(next_url)
             else:
-                return redirect(reverse('home-url'))
+                return redirect(reverse('home-url'), args=(request,),)
 
     context = {
         'form': form,

@@ -11,17 +11,14 @@ def login_required(some_function):
                 if 'user' in args[index].session:
                     username = args[index].session['user']
                 else:
-                    # print(index)
                     username = args[index].user.username
-                    # print(username)
                 break
             except IndexError:
                 index -= 1
                 continue
             except AttributeError:
                 break
-        # print("out of loop")
-        # print(username)
+
         if not username:
             return redirect(reverse('login-url'))
         user = User.objects.filter(username=username).first()

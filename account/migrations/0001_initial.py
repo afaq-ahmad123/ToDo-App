@@ -6,7 +6,9 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     initial = True
-
+    needed_by = (
+        ('authtoken', '0001_initial'),
+    )
     dependencies = [
     ]
 

@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.shortcuts import reverse
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
 # Create your models here.
 
 
@@ -86,6 +89,9 @@ class User(AbstractBaseUser):#models.Model
         # The user is identified by their email address
         return self.username
 
+    def has_perms(self, perm, obj=None):
+        return True
+
     def has_perm(self, perm, obj=None):
         return True
 
@@ -112,3 +118,8 @@ class User(AbstractBaseUser):#models.Model
     def is_admin(self):
         return self.admin
 
+
+@receiver(post_save, sender=User)
+def create_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)

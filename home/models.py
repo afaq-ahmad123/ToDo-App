@@ -9,7 +9,6 @@ from django.urls import reverse
 
 
 class TaskModel(models.Model):
-    # id = models.IntegerField(primary_key=True, auto_created=True)
     id = models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
     name = models.CharField(max_length=100)
     complete = models.BooleanField()
