@@ -8,6 +8,8 @@ from rest_framework.authtoken.models import Token
 
 
 class UserManager(BaseUserManager):
+    """The main manager to handle simple user create, staff create and superuser"""
+
     def create_user(self, username, email=None, password=None):
         if not username:
             raise ValueError("Username required")
@@ -38,7 +40,8 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):#models.Model
+class User(AbstractBaseUser):
+    """The main user model with specified fields and functions"""
     id = models.IntegerField(unique=True)
     username = models.CharField(primary_key=True, max_length=20)
     first_name = models.CharField(max_length=10)

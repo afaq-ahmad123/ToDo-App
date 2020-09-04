@@ -6,7 +6,10 @@ from django.urls import reverse
 from django.contrib import messages
 from .backend import AuthBackend
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from .serializer import UserSerializer
 from .decorators import login_required
 from django.utils.decorators import method_decorator
@@ -57,6 +60,19 @@ def signup_view(request):
         'form': form
     }
     return render(request, 'account/signup.html', context)
+
+
+class AuthenticationAPI(APIView):
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
+
+    def get(self, request):
+        serializer = UserSerializer(request.user, many=True)
+        content = {
+            'user': request.user.username,
+            'auth': request.auth,
+        }
+        return Response(content)
 
 
 class UserListAPI(generics.ListAPIView):
