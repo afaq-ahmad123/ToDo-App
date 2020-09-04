@@ -6,6 +6,8 @@ from django.views.generic import ListView, UpdateView
 from rest_framework import generics
 from .serializer import TaskSerializer
 from rest_framework.authtoken.models import Token
+from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib import messages
 from django.utils.decorators import method_decorator
@@ -14,6 +16,7 @@ from django.utils.decorators import method_decorator
 @method_decorator(login_required, name='dispatch')
 class TaskListView(ListView):
     """Class Based List view to show all the tasks on the home page. It is used instead of home() view function"""
+
     model = TaskModel
     template_name = 'home/index.html'
     context_object_name = 'tasks'
@@ -23,6 +26,7 @@ class TaskListView(ListView):
     }
 
     def get_queryset(self):
+        """return the Tasks of only logged in user"""
         return self.model.objects.filter(user=self.request.user)
 
     def get_context_data(self, *, object_list=None, **kwargs):
@@ -37,6 +41,7 @@ class TaskListView(ListView):
 @method_decorator(login_required, name='dispatch')
 class TaskUpdateView(UpdateView):
     """Class Based view to update a task. It will use homemodel_form.html template."""
+
     model = TaskModel
     template_name = 'home/homemodel_form.html'
     fields = ['name', 'complete']
@@ -44,7 +49,8 @@ class TaskUpdateView(UpdateView):
     def get_object(self, queryset=None):
         if queryset is None:
             queryset = self.get_queryset()
-            # Next, try looking up by primary key.
+
+        # Next, try looking up by primary key.
         pk = self.kwargs.get(self.pk_url_kwarg)
         if pk is not None:
             queryset = queryset.filter(pk=pk, user=self.request.user)
@@ -62,32 +68,44 @@ class TaskUpdateView(UpdateView):
         return reverse('home-url')
 
 
-@method_decorator(login_required, name='dispatch')
 class TaskApi(generics.ListCreateAPIView):
+    """Api to get the tasks of user with current tokens/Logged in Session"""
     queryset = None
     serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        if self.request.user.is_authenticated:
-                # and 'token' in self.request.session:
-            self.queryset = TaskModel.objects.filter(user=self.request.user)
-            return super(TaskApi, self).get_queryset()
-        else:
-            return None
+        self.queryset = TaskModel.objects.filter(user=self.request.user)
+        return super(TaskApi, self).get_queryset()
 
 
-class TaskDetailAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = TaskModel.objects.all()
+class TaskUpdateAPI(generics.UpdateAPIView):
+    """Getting the Detailed view of task with the specified id"""
+
+    queryset = None
     serializer_class = TaskSerializer
-    authentication_classes = ()
-    permission_classes = ()
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        self.queryset = TaskModel.objects.filter(user=self.request.user)
+        return super(TaskUpdateAPI, self).get_queryset()
+
+
+class TaskDeleteAPI(generics.DestroyAPIView):
+    queryset = None
+    serializer_class = TaskSerializer
+    permission_classes = (IsAuthenticated,)
+    
+    def get_queryset(self):
+        self.queryset = TaskModel.objects.filter(user=self.request.user)
+        return super(TaskDeleteAPI, self).get_queryset()
+
 
 # @api_view(['GET'])
 # def task_list(request):
-#     if request.method == 'GET':
-#         tasks = TaskModel.objects.all()
-#         serializer = TaskSerializer(tasks, many=True)
-#         return Response(serializer.data)
+#     tasks = TaskModel.objects.filter(user=request.user)
+#     serializer = TaskSerializer(tasks, many=True)
+#     return Response(serializer.data)
 
 @login_required
 def delete(request, pk):

@@ -5,6 +5,9 @@ from account.models import User
 from django.urls import reverse
 from django.contrib import messages
 from .backend import AuthBackend
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from .serializer import UserSerializer
 from .decorators import login_required
 from django.utils.decorators import method_decorator
 
@@ -54,6 +57,29 @@ def signup_view(request):
         'form': form
     }
     return render(request, 'account/signup.html', context)
+
+
+class UserListAPI(generics.ListAPIView):
+    """API to list all the users """
+    queryset = None
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, )
+
+    def get_queryset(self):
+        self.queryset = User.objects.all()
+        return super(UserListAPI, self).get_queryset()
+
+
+class UserUpdateAPI(generics.UpdateAPIView):
+    """API to update a user"""
+    queryset = None
+    serializer_class = UserSerializer
+    permission_classes = (IsAuthenticated, )
+    lookup_field = 'id'
+
+    def get_queryset(self):
+        self.queryset = User.objects.filter(username=self.request.user.username)
+        return super(UserUpdateAPI, self).get_queryset()
 
 
 @method_decorator(login_required, name="dispatch")

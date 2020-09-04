@@ -13,10 +13,10 @@ class AuthBackend(object):
 
     @staticmethod
     def login(request, user):
-        for users in User.objects.all():
-            Token.objects.get_or_create(user=users)
         request.session['user'] = user.username
         request.user = user
+
+        # store the tokens for token authentication api's
         request.auth = Token.objects.get(user=user).key
         request.session['token'] = Token.objects.get(user=user).key
 
