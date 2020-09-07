@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.authentication import BasicAuthentication, SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from .serializer import UserSerializer
+from .serializer import UserSerializer, UserUpdateSerializer
 from .decorators import login_required
 from django.utils.decorators import method_decorator
 
@@ -81,6 +81,7 @@ class UserListAPI(generics.ListAPIView):
     queryset = None
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
 
     def get_queryset(self):
         self.queryset = User.objects.filter(username=self.request.user.username)
@@ -90,8 +91,9 @@ class UserListAPI(generics.ListAPIView):
 class UserUpdateAPI(generics.UpdateAPIView):
     """API to update a user"""
     queryset = None
-    serializer_class = UserSerializer
+    serializer_class = UserUpdateSerializer
     permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication,)
     lookup_field = 'id'
 
     def get_queryset(self):

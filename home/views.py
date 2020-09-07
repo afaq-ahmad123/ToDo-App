@@ -8,6 +8,7 @@ from .serializer import TaskSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.response import Response
 from django.contrib import messages
 from django.utils.decorators import method_decorator
@@ -68,15 +69,17 @@ class TaskUpdateView(UpdateView):
         return reverse('home-url')
 
 
-class TaskApi(generics.ListCreateAPIView):
+class TaskApi(generics.ListAPIView):
     """Api to get the tasks of user with current tokens/Logged in Session"""
     queryset = None
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication, )
 
     def get_queryset(self):
-        self.queryset = TaskModel.objects.filter(user=self.request.user)
-        return super(TaskApi, self).get_queryset()
+        if 'token' in self.request.session:
+            self.queryset = TaskModel.objects.filter(user=self.request.user)
+            return super(TaskApi, self).get_queryset()
 
 
 class TaskUpdateAPI(generics.UpdateAPIView):
@@ -85,6 +88,7 @@ class TaskUpdateAPI(generics.UpdateAPIView):
     queryset = None
     serializer_class = TaskSerializer
     permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication,)
 
     def get_queryset(self):
         self.queryset = TaskModel.objects.filter(user=self.request.user)
@@ -94,12 +98,25 @@ class TaskUpdateAPI(generics.UpdateAPIView):
 class TaskDeleteAPI(generics.DestroyAPIView):
     queryset = None
     serializer_class = TaskSerializer
+    task_count = 0
+    authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     
     def get_queryset(self):
         self.queryset = TaskModel.objects.filter(user=self.request.user)
+        self.task_count = self.queryset.count()
         return super(TaskDeleteAPI, self).get_queryset()
 
+    def destroy(self, request, *args, **kwargs):
+        delete_status = super(TaskDeleteAPI, self).destroy(request)
+        if delete_status:
+            user = User.objects.get(id=request.user.id)
+            user.task_count = self.task_count - 1
+            user.save(update_fields=['task_count'])
+            print(user.task_count)
+            return delete_status
+        else:
+            return None
 
 # @api_view(['GET'])
 # def task_list(request):

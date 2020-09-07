@@ -3,20 +3,20 @@
 
 {% load static %}
 <!--<link href="{% static 'index.css' %}" rel="stylesheet">-->
+<script type="text/javascript">
+    var a = 0;
+    var b = 20 * a;
+    alert(b);
+    document.getElementById("demo").innerHTML =
+    "The total is: " + b;
+</script>
+
 
 {% block content %}
+    <p id="demo"></p>
     <h2>Login</h2>
     <form action="{% url 'login-url' %}" method="POST" class="form-group">
         {% csrf_token %}
-<!--        {{ form.username.errors }}-->
-<!--        <div class="form-control">-->
-<!--        Username:-->
-<!--        {{ form.username }}</div>-->
-<!--        <div class="form-control">-->
-
-<!--        {{ form.non_field_errors }}-->
-<!--        Password:-->
-<!--        {{ form.password }}</div>-->
         {{ form.non_field_errors }}
         {% for field in form %}
           <p>
