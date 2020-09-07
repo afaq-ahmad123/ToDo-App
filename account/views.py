@@ -67,11 +67,12 @@ class AuthenticationAPI(APIView):
     authentication_classes = (SessionAuthentication, BasicAuthentication, TokenAuthentication)
 
     def get(self, request):
-        serializer = UserSerializer(request.user, many=True)
+        # serializer = UserSerializer(request.user, many=True)
         content = {
             'user': request.user.username,
-            'auth': request.auth,
         }
+        if request.auth:
+            content['auth'] = request.auth.key
         return Response(content)
 
 
@@ -82,7 +83,7 @@ class UserListAPI(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
 
     def get_queryset(self):
-        self.queryset = User.objects.all()
+        self.queryset = User.objects.filter(username=self.request.user.username)
         return super(UserListAPI, self).get_queryset()
 
 

@@ -7,6 +7,6 @@ urlpatterns = [
     path('logout/', views.logout_user, name="logout-url"),
     path('user-list-api/', views.UserListAPI.as_view()),
     path('auth-api/', views.AuthenticationAPI.as_view()),
-    re_path('^user-edit-api/(?P<id>[0-9]+)/$', views.UserUpdateAPI.as_view()),
+    re_path('^user-edit-api/(?P<id>[0-9]+)$', views.UserUpdateAPI.as_view()),
     re_path(r'^prof/(?P<pk>[0-9]+)/$', views.EditProfile.as_view(), name="prof-url"),
 ]
