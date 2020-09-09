@@ -17,8 +17,8 @@ class AuthBackend(object):
         request.user = user
 
         # store the tokens for token authentication api's
-        request.auth = Token.objects.get(user=user).key
-        request.session['token'] = Token.objects.get(user=user).key
+        # request.auth = Token.objects.get(user=user).key
+        # request.session['token'] = Token.objects.get(user=user).key
 
     @staticmethod
     def logout(request):

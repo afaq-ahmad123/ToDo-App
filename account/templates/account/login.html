@@ -3,17 +3,10 @@
 
 {% load static %}
 <!--<link href="{% static 'index.css' %}" rel="stylesheet">-->
-<script type="text/javascript">
-    var a = 0;
-    var b = 20 * a;
-    alert(b);
-    document.getElementById("demo").innerHTML =
-    "The total is: " + b;
-</script>
-
 
 {% block content %}
-    <p id="demo"></p>
+    <img id="demo" src="{% static 'images/login1.png' %}"></img>
+    <script type="text/javascript" src="{% static 'scripts/index.js' %}"></script>
     <h2>Login</h2>
     <form action="{% url 'login-url' %}" method="POST" class="form-group">
         {% csrf_token %}
@@ -33,5 +26,21 @@
         <button type="submit" class="btn btn-primary"> Login </button>
     </form>
     If you don't have account, you can register <a href="{% url 'sign-url' %}">here</a>
+
+    <script type="text/javascript">
+        var a = 0;
+        var b = 20 * a;
+        document.getElementById("demo").innerHTML =
+        "The total is: " + b;
+        let img = document.querySelector("img");
+        img.onclick = function(){
+            let name = prompt("Your name?");
+            alert(name);
+        }
+        /*let myGreeting = setTimeout(function() {
+          alert('Hello, Mr. Universe!');
+        }, 2000)*/
+    </script>
+
 {% endblock %}
 
