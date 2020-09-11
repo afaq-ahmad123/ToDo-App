@@ -5,7 +5,8 @@
 <script type="text/js" src='https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js'></script>
 <link href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css' rel="stylesheet">
 <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-<link href="{% static 'index.css' %}" rel="stylesheet">
+<link href="{% static 'scripts/main.css' %}" rel="stylesheet">
+<script type="text/javascript" src="{% static 'scripts/task.js' %}"></script>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <br><br>
 <div class="row d-flex justify-content-center container">
@@ -15,9 +16,8 @@
                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                     <i class="fa fa-tasks"></i>&nbsp;Update Task
                 </div>
-                <form method="POST">
+                <form method="POST" name="form" onsubmit="return update()">
                     {% csrf_token %}
-
                     {{ form|crispy }}
                     <div class="d-block text-right card-footer">
                         <button class="btn btn-outline-primary" type="submit">Update</button>

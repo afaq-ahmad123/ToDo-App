@@ -48,7 +48,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=10)
     anonymous = models.BooleanField(default=False)
     authenticated = models.BooleanField(default=False)
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

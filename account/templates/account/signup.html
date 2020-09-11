@@ -4,23 +4,21 @@
 <link href="{% static 'index.css' %}" rel="stylesheet">
 
 {% block content %}
+    <script type="text/javascript" src="{% static 'scripts/signup.js' %}"></script>
     <h2>Sign up</h2>
-     <form action="{% url 'sign-url' %}" method="POST">
+     <form name="form" action="{% url 'sign-url' %}" method="POST" onsubmit="return validate()">
         {% csrf_token %}
          {{ form.non_field_errors }}
         {% for field in form %}
           <p>
             {{ field.label_tag }}<br>
             {{ field }}
-<!--            {% if field.help_text %}-->
-<!--              <small style="color: grey">{{ field.help_text }}</small>-->
-<!--            {% endif %}-->
             {% for error in field.errors %}
               <p style="color: red">{{ error }}</p>
             {% endfor %}
           </p>
         {% endfor %}
-        <button type="submit" class="btn btn-primary">Sign up</button>
+        <button id="submit_btn" type="submit" class="btn btn-primary">Sign up</button>
     </form>
     If you already have account, you can register <a href="{% url 'login-url' %}">here</a>
 {% endblock %}
