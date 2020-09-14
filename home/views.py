@@ -113,7 +113,6 @@ class TaskDeleteAPI(generics.DestroyAPIView):
             user = User.objects.get(id=request.user.id)
             user.task_count = self.task_count - 1
             user.save(update_fields=['task_count'])
-            print(user.task_count)
             return delete_status
         else:
             return None
@@ -163,8 +162,7 @@ def add_task(request):
             user.task_count = task_count
             user.save(update_fields=['task_count'])
             messages.success(request, "Task Added Successfully")
-        print(request.POST)
-    print(TaskModel.objects.filter(user=request.user))
+
     return redirect(reverse('home-url'))
 
 
@@ -173,13 +171,14 @@ def shortlist(request, i=1):
     """ When a checkbox is checked for a specified view, this view method will be called to
     shortlist the tasks as required """
     i = request.GET.get('i', None)
-    print(i)
+    ACTIVE_TASK = 2
+    INACTIVE_TASK = 3
     results = TaskModel.objects.filter(user=request.user)
-    if int(i) == 2:
+    if int(i) == ACTIVE_TASK:
         results = TaskModel.objects.filter(user=request.user).filter(complete=False)
-    elif int(i) == 3:
+    elif int(i) == INACTIVE_TASK:
         results = TaskModel.objects.filter(user=request.user).filter(complete=True)
-    print(results)
+
     context = {
         'tasks': results
     }

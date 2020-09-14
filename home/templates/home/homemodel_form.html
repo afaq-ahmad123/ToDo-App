@@ -16,7 +16,7 @@
                 <div class="card-header-title font-size-lg text-capitalize font-weight-normal">
                     <i class="fa fa-tasks"></i>&nbsp;Update Task
                 </div>
-                <form method="POST" name="form" onsubmit="return update()">
+                <form method="POST" name="form" onsubmit="return update_validations()">
                     {% csrf_token %}
                     {{ form|crispy }}
                     <div class="d-block text-right card-footer">

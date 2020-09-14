@@ -6,7 +6,7 @@
 {% block content %}
     <script type="text/javascript" src="{% static 'scripts/signup.js' %}"></script>
     <h2>Sign up</h2>
-     <form name="form" action="{% url 'sign-url' %}" method="POST" onsubmit="return validate()">
+     <form name="form" action="{% url 'sign-url' %}" method="POST" onsubmit="return user_validation()">
         {% csrf_token %}
          {{ form.non_field_errors }}
         {% for field in form %}

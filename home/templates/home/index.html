@@ -72,9 +72,9 @@
                 </perfect-scrollbar>
             </div>
             <div class="d-block text-right card-footer">
-                 <form action="{% url 'add-url' %}" method="POST" onsubmit="return validate()">
+                 <form name="form" action="{% url 'add-url' %}" method="POST" onsubmit="return task_validations()">
                      {% csrf_token %}
-                     <input type="text" id="textfield1" class="form-control" name="name" required>
+                     <input type="text" id="textfield1" class="form-control" name="name">
                     <div class="mr-2 btn btn-link btn-sm" id="cancel" onclick="clearText()">Cancel</div>
                     <button type="submit" id="add_btn" class="btn btn-primary">Add Task</button>
                  </form>
@@ -104,3 +104,9 @@
         document.getElementById('textfield1').value = "";
     }
 </script>
+<!-- Load React. -->
+<!-- Note: when deploying, replace "development.js" with "production.min.js". -->
+<script src="https://unpkg.com/react@16/umd/react.development.js"
+        crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+        crossorigin></script>
