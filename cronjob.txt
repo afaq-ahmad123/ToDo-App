@@ -1,0 +1,9 @@
+# 0 5 * * 1 tar -zcf /var/backups/home.tgz /home/
+#
+# For more information see the manual pages of crontab(5) and cron(8)
+#
+# m h  dom mon dow   command
+
+
+
+10 * * * * cd /home/afaq/Desktop/Afaq\ Ahmad/task4/task4 && /home/afaq/Desktop/Afaq\ Ahmad/task4/env/bin/python /home/afaq/Desktop/Afaq\ Ahmad/task4/task4/manage.py home

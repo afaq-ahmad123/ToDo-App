@@ -1,7 +1,8 @@
 
 {% for task in tasks %}
     <li class="list-group-item inline">
-        <div class="todo-indicator bg-success">
+        <div class="todo-indicator
+        {% if task.complete %}bg-success{% else %}bg-danger{% endif %}">
         </div>
         <div class="widget-content p-0">
             <div class="widget-content-wrapper">
@@ -33,4 +34,5 @@
             </div>
         </div>
     </li>
+<!--<hr>-->
 {% endfor %}

@@ -16,8 +16,6 @@ import django_heroku
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
 
-
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -41,20 +39,44 @@ ALLOWED_HOSTS = ['*']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
-    'home',
-    'account',
+    'rest_framework.authtoken',
     'crispy_forms',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'coverage',
+    'django_nose',
+    'account.apps.AccountConfig',
+    'home.apps.HomeConfig',
 ]
+
+TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
+
+NOSE_ARGS = [
+    '--with-coverage',
+    '--cover-package=home,account',
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'PAGINATE_BY': 10
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'account.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -79,6 +101,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'task4.wsgi.application'
+AUTH_USER_MODEL = 'account.User'
 
 
 # Database
@@ -95,7 +118,10 @@ DATABASES = {
         'PORT': '5432',
          }
 }
-# DATABASES['default'] =
+if 'HEROKU_ENV' in os.environ:
+    DATABASES["default"] = dj_database_url.config(
+        ssl_require=True,
+    )
 
 
 # Password validation
@@ -122,7 +148,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 
@@ -136,6 +162,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 from django.contrib.messages import constants as messages
 

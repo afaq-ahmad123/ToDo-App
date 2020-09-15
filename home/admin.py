@@ -4,8 +4,6 @@ from .models import TaskModel
 
 # Register your models here.
 
-# admin.site.register(TaskModel)
-
 
 class filter(admin.SimpleListFilter):
     title = 'Search filters'
@@ -26,8 +24,8 @@ class filter(admin.SimpleListFilter):
 @admin.register(TaskModel)
 class TaskAdmin(admin.ModelAdmin):
     readonly_fields = ('id', )
-    list_display = ['name', 'complete', 'id']
+    list_display = ['name', 'created_at', 'complete']
     list_filter = (filter, )
-    fields = ['id', 'name', 'complete']
-    search_fields = ['name__endswith']
+    fields = ['id', 'name', 'complete', 'user']
+    search_fields = ['name__startswith']
 
